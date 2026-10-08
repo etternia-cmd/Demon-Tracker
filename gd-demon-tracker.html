@@ -1,0 +1,3493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Geometry Dash Demon Tracker
+</title>
+
+
+<style>
+
+/* =========================================================
+   BASIC PAGE
+========================================================= */
+
+:root {
+
+    --background: #0d0f18;
+
+    --panel: #151925;
+
+    --panel-light: #1b2030;
+
+    --border: #2b3247;
+
+    --text: #f2f4ff;
+
+    --muted: #9ba3ba;
+
+    --accent: #8b5cf6;
+
+    --accent-blue: #5ee7ff;
+
+
+    --hard-red: #ff7272;
+
+    --insane-pink: #ff77b7;
+
+    --extreme-red: #8f1d2c;
+
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+
+        radial-gradient(
+            circle at top left,
+            rgba(139, 92, 246, 0.18),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at bottom right,
+            rgba(94, 231, 255, 0.08),
+            transparent 30%
+        ),
+
+        var(--background);
+
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header {
+
+    padding: 42px 24px 30px;
+
+    border-bottom:
+        1px solid var(--border);
+
+    background:
+        rgba(13, 15, 24, 0.85);
+
+    backdrop-filter:
+        blur(12px);
+
+}
+
+
+.header-inner,
+main {
+
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+}
+
+
+h1 {
+
+    margin: 0 0 8px;
+
+    font-size:
+        clamp(2rem, 5vw, 3.4rem);
+
+    letter-spacing: -1px;
+
+}
+
+
+.subtitle {
+
+    margin: 0;
+
+    color: var(--muted);
+
+    font-size: 1rem;
+
+}
+
+
+.accent {
+
+    color: var(--accent-blue);
+
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+main {
+
+    padding:
+        28px 24px 60px;
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.stats {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+
+    margin-bottom: 24px;
+
+}
+
+
+.stat {
+
+    padding: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--panel),
+            var(--panel-light)
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 8px 30px
+        rgba(0, 0, 0, 0.18);
+
+}
+
+
+.stat-label {
+
+    color: var(--muted);
+
+    font-size: 0.82rem;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+
+}
+
+
+.stat-value {
+
+    margin-top: 5px;
+
+    font-size: 1.9rem;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+
+.controls {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+
+}
+
+
+input,
+select,
+button,
+textarea {
+
+    font: inherit;
+
+}
+
+
+input,
+select {
+
+    padding:
+        11px 13px;
+
+    background:
+        var(--panel);
+
+    color:
+        var(--text);
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        10px;
+
+    outline:
+        none;
+
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+
+    border-color:
+        var(--accent);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(139, 92, 246, 0.14);
+
+}
+
+
+#search {
+
+    flex:
+        1 1 260px;
+
+}
+
+
+button {
+
+    padding:
+        11px 15px;
+
+    border:
+        0;
+
+    border-radius:
+        10px;
+
+    color:
+        white;
+
+    background:
+        var(--accent);
+
+    cursor:
+        pointer;
+
+    font-weight:
+        700;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease;
+
+}
+
+
+button:hover {
+
+    filter:
+        brightness(1.12);
+
+    transform:
+        translateY(-1px);
+
+}
+
+
+.secondary {
+
+    background:
+        var(--panel-light);
+
+    border:
+        1px solid var(--border);
+
+}
+
+
+/* =========================================================
+   MAIN TABLE
+========================================================= */
+
+.table-wrap {
+
+    overflow-x:
+        auto;
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        15px;
+
+    background:
+        rgba(21, 25, 37, 0.88);
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.20);
+
+}
+
+
+table {
+
+    width:
+        100%;
+
+    min-width:
+        900px;
+
+    border-collapse:
+        separate;
+
+    border-spacing:
+        0 8px;
+
+    padding:
+        0 8px;
+
+}
+
+
+th {
+
+    padding:
+        10px 16px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.78rem;
+
+    text-align:
+        left;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.07em;
+
+}
+
+
+td {
+
+    padding:
+        15px 16px;
+
+    vertical-align:
+        top;
+
+}
+
+
+/* =========================================================
+   DRAGGABLE ROWS
+========================================================= */
+
+.demon-row {
+
+    cursor:
+        grab;
+
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        opacity 0.15s ease;
+
+}
+
+
+.demon-row:hover {
+
+    transform:
+        translateY(-2px);
+
+    filter:
+        brightness(1.08);
+
+}
+
+
+.demon-row:active {
+
+    cursor:
+        grabbing;
+
+}
+
+
+.demon-row.dragging {
+
+    opacity:
+        0.45;
+
+    transform:
+        scale(0.985);
+
+}
+
+
+/* Row being hovered while dragging another row */
+
+.demon-row.drag-over {
+
+    outline:
+        2px dashed
+        rgba(255, 255, 255, 0.45);
+
+    outline-offset:
+        -2px;
+
+}
+
+
+/* =========================================================
+   INSANE ROW
+========================================================= */
+
+.insane-row td {
+
+    background:
+
+        linear-gradient(
+            105deg,
+            rgba(255, 119, 183, 0.15),
+            rgba(255, 119, 183, 0.055),
+            rgba(21, 25, 37, 0.90)
+        );
+
+    border-top:
+        1px solid
+        rgba(255, 119, 183, 0.25);
+
+    border-bottom:
+        1px solid
+        rgba(255, 119, 183, 0.20);
+
+}
+
+
+.insane-row td:first-child {
+
+    border-left:
+        1px solid
+        rgba(255, 119, 183, 0.25);
+
+    border-radius:
+        12px 0 0 12px;
+
+}
+
+
+.insane-row td:last-child {
+
+    border-right:
+        1px solid
+        rgba(255, 119, 183, 0.25);
+
+    border-radius:
+        0 12px 12px 0;
+
+}
+
+
+/* =========================================================
+   EXTREME ROW
+========================================================= */
+
+.extreme-row td {
+
+    background:
+
+        linear-gradient(
+            105deg,
+            rgba(143, 29, 44, 0.48),
+            rgba(100, 22, 35, 0.24),
+            rgba(21, 25, 37, 0.92)
+        );
+
+    border-top:
+        1px solid
+        rgba(180, 50, 65, 0.45);
+
+    border-bottom:
+        1px solid
+        rgba(180, 50, 65, 0.35);
+
+}
+
+
+.extreme-row td:first-child {
+
+    border-left:
+        1px solid
+        rgba(180, 50, 65, 0.45);
+
+    border-radius:
+        12px 0 0 12px;
+
+}
+
+
+.extreme-row td:last-child {
+
+    border-right:
+        1px solid
+        rgba(180, 50, 65, 0.45);
+
+    border-radius:
+        0 12px 12px 0;
+
+}
+
+
+/* =========================================================
+   DEMON INFORMATION
+========================================================= */
+
+.name {
+
+    min-width:
+        190px;
+
+    font-weight:
+        750;
+
+}
+
+
+.attempts {
+
+    white-space:
+        nowrap;
+
+    font-family:
+        "JetBrains Mono",
+        Consolas,
+        monospace;
+
+}
+
+
+.notes {
+
+    min-width:
+        390px;
+
+}
+
+
+/* =========================================================
+   NOTES BOX
+========================================================= */
+
+.notes-box {
+
+    display:
+        block;
+
+    padding:
+        10px 12px;
+
+    color:
+        #c4c9d9;
+
+    line-height:
+        1.5;
+
+    background:
+        rgba(13, 15, 24, 0.38);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.10);
+
+    border-radius:
+        10px;
+
+    box-shadow:
+        inset
+        0 1px 2px
+        rgba(255, 255, 255, 0.025);
+
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.badge {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    padding:
+        5px 9px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        0.78rem;
+
+    font-weight:
+        800;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.badge.insane {
+
+    background:
+        rgba(255, 119, 183, 0.14);
+
+    color:
+        #ff9bca;
+
+}
+
+
+.badge.extreme {
+
+    background:
+        rgba(143, 29, 44, 0.30);
+
+    color:
+        #ff7d8d;
+
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.actions {
+
+    white-space:
+        nowrap;
+
+}
+
+
+.actions button {
+
+    padding:
+        7px 10px;
+
+    margin-right:
+        5px;
+
+    font-size:
+        0.8rem;
+
+}
+
+
+.delete {
+
+    background:
+        #321725;
+
+    color:
+        #ff8ba0;
+
+    border:
+        1px solid
+        #5a2436;
+
+}
+
+
+/* =========================================================
+   HARD DEMON SECTION
+========================================================= */
+
+.hard-section {
+
+    margin-top:
+        22px;
+
+    border:
+        1px solid
+        rgba(255, 114, 114, 0.28);
+
+    border-radius:
+        15px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(255, 114, 114, 0.07),
+            rgba(21, 25, 37, 0.90)
+        );
+
+    box-shadow:
+        0 12px 35px
+        rgba(0, 0, 0, 0.18);
+
+    overflow:
+        hidden;
+
+}
+
+
+/* =========================================================
+   HARD HEADER
+========================================================= */
+
+.hard-header {
+
+    width:
+        100%;
+
+    padding:
+        17px 20px;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    background:
+
+        linear-gradient(
+            100deg,
+            rgba(255, 114, 114, 0.13),
+            rgba(255, 114, 114, 0.035)
+        );
+
+    color:
+        var(--text);
+
+    border:
+        none;
+
+    border-radius:
+        0;
+
+    cursor:
+        pointer;
+
+    text-align:
+        left;
+
+    transition:
+        background 0.2s ease;
+
+}
+
+
+.hard-header:hover {
+
+    filter:
+        none;
+
+    transform:
+        none;
+
+    background:
+
+        linear-gradient(
+            100deg,
+            rgba(255, 114, 114, 0.19),
+            rgba(255, 114, 114, 0.05)
+        );
+
+}
+
+
+.hard-title {
+
+    font-size:
+        1.05rem;
+
+    font-weight:
+        850;
+
+}
+
+
+.hard-count {
+
+    margin-left:
+        10px;
+
+    color:
+        #d49ca5;
+
+    font-size:
+        0.78rem;
+
+}
+
+
+.hard-arrow {
+
+    color:
+        #ff9b9b;
+
+    font-size:
+        0.85rem;
+
+    transition:
+        transform 0.3s ease;
+
+}
+
+
+.hard-section.open
+.hard-arrow {
+
+    transform:
+        rotate(180deg);
+
+}
+
+
+/* =========================================================
+   COLLAPSIBLE HARD CONTENT
+========================================================= */
+
+.hard-content {
+
+    display:
+        grid;
+
+    grid-template-rows:
+        0fr;
+
+    transition:
+        grid-template-rows
+        0.35s ease;
+
+}
+
+
+.hard-content-inner {
+
+    overflow:
+        hidden;
+
+}
+
+
+.hard-section.open
+.hard-content {
+
+    grid-template-rows:
+        1fr;
+
+}
+
+
+/* =========================================================
+   HARD GRID
+========================================================= */
+
+#hardList {
+
+    padding:
+        16px;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        10px;
+
+}
+
+
+/* =========================================================
+   HARD CARDS
+========================================================= */
+
+.hard-card {
+
+    padding:
+        14px;
+
+    background:
+
+        linear-gradient(
+            120deg,
+            rgba(255, 114, 114, 0.14),
+            rgba(255, 114, 114, 0.035)
+        );
+
+    border:
+        1px solid
+        rgba(255, 114, 114, 0.20);
+
+    border-radius:
+        11px;
+
+    transition:
+        transform 0.15s ease,
+        background 0.15s ease;
+
+}
+
+
+.hard-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    background:
+
+        linear-gradient(
+            120deg,
+            rgba(255, 114, 114, 0.20),
+            rgba(255, 114, 114, 0.055)
+        );
+
+}
+
+
+.hard-card-top {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        10px;
+
+}
+
+
+.hard-card-name {
+
+    font-weight:
+        800;
+
+}
+
+
+.hard-card-attempts {
+
+    color:
+        #ffaaaa;
+
+    font-family:
+        "JetBrains Mono",
+        Consolas,
+        monospace;
+
+    font-size:
+        0.82rem;
+
+    white-space:
+        nowrap;
+
+}
+
+
+.hard-card-notes {
+
+    margin-top:
+        9px;
+
+    padding:
+        9px 10px;
+
+    color:
+        #d4bfc3;
+
+    font-size:
+        0.82rem;
+
+    line-height:
+        1.45;
+
+    background:
+        rgba(13, 15, 24, 0.32);
+
+    border:
+        1px solid
+        rgba(255, 255, 255, 0.08);
+
+    border-radius:
+        9px;
+
+}
+
+
+.hard-actions {
+
+    margin-top:
+        9px;
+
+}
+
+
+.hard-actions button {
+
+    padding:
+        5px 8px;
+
+    font-size:
+        0.72rem;
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty {
+
+    padding:
+        35px;
+
+    color:
+        var(--muted);
+
+    text-align:
+        center;
+
+}
+
+
+/* =========================================================
+   DIALOG
+========================================================= */
+
+dialog {
+
+    width:
+        min(560px, calc(100% - 30px));
+
+    padding:
+        0;
+
+    color:
+        var(--text);
+
+    background:
+        var(--panel);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        16px;
+
+    box-shadow:
+        0 25px 80px
+        rgba(0, 0, 0, 0.55);
+
+}
+
+
+dialog::backdrop {
+
+    background:
+        rgba(0, 0, 0, 0.70);
+
+    backdrop-filter:
+        blur(3px);
+
+}
+
+
+.dialog-content {
+
+    padding:
+        24px;
+
+}
+
+
+.dialog-content h2 {
+
+    margin-top:
+        0;
+
+}
+
+
+.form-grid {
+
+    display:
+        grid;
+
+    gap:
+        13px;
+
+}
+
+
+label {
+
+    display:
+        grid;
+
+    gap:
+        6px;
+
+    color:
+        var(--muted);
+
+    font-size:
+        0.88rem;
+
+    font-weight:
+        650;
+
+}
+
+
+textarea {
+
+    min-height:
+        120px;
+
+    padding:
+        11px 13px;
+
+    resize:
+        vertical;
+
+    color:
+        var(--text);
+
+    background:
+        var(--panel-light);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+
+    outline:
+        none;
+
+}
+
+
+.dialog-actions {
+
+    display:
+        flex;
+
+    justify-content:
+        flex-end;
+
+    gap:
+        10px;
+
+    margin-top:
+        20px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 750px) {
+
+    .stats {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+    }
+
+
+    header {
+
+        padding-top:
+            30px;
+
+    }
+
+
+    main {
+
+        padding-inline:
+            14px;
+
+    }
+
+
+    #hardList {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 450px) {
+
+    .stats {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .stat {
+
+        padding:
+            14px;
+
+    }
+
+
+    .stat-value {
+
+        font-size:
+            1.5rem;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header>
+
+    <div class="header-inner">
+
+        <h1>
+
+            Geometry Dash
+
+            <span class="accent">
+                Demon Tracker
+            </span>
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            A personal log of every demon you've conquered.
+
+        </p>
+
+    </div>
+
+</header>
+
+
+
+<main>
+
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<section class="stats">
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Total Demons
+        </div>
+
+        <div
+            class="stat-value"
+            id="totalStat"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Hard
+        </div>
+
+        <div
+            class="stat-value"
+            id="hardStat"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Insane
+        </div>
+
+        <div
+            class="stat-value"
+            id="insaneStat"
+        >
+            0
+        </div>
+
+    </div>
+
+
+    <div class="stat">
+
+        <div class="stat-label">
+            Extreme
+        </div>
+
+        <div
+            class="stat-value"
+            id="extremeStat"
+        >
+            0
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     CONTROLS
+===================================================== -->
+
+<section class="controls">
+
+
+    <input
+        id="search"
+        type="search"
+        placeholder="Search demons or notes..."
+    >
+
+
+    <select id="difficultyFilter">
+
+        <option value="all">
+            All difficulties
+        </option>
+
+        <option value="Hard">
+            Hard
+        </option>
+
+        <option value="Insane">
+            Insane
+        </option>
+
+        <option value="Extreme">
+            Extreme
+        </option>
+
+    </select>
+
+
+    <select id="sort">
+
+        <option value="custom">
+            My Order
+        </option>
+
+        <option value="name">
+            Sort: Name
+        </option>
+
+        <option value="attempts">
+            Sort: Attempts
+        </option>
+
+    </select>
+
+
+    <button id="addBtn">
+
+        + Add Demon
+
+    </button>
+
+
+    <button
+        class="secondary"
+        id="exportBtn"
+    >
+
+        Export CSV
+
+    </button>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     INSANE + EXTREME TABLE
+===================================================== -->
+
+<section class="table-wrap">
+
+
+    <table>
+
+
+        <thead>
+
+            <tr>
+
+                <th>
+                    Demon
+                </th>
+
+                <th>
+                    Difficulty
+                </th>
+
+                <th>
+                    Attempts
+                </th>
+
+                <th>
+                    Notes
+                </th>
+
+                <th>
+                    Actions
+                </th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody id="tableBody"></tbody>
+
+
+    </table>
+
+
+    <div
+        class="empty"
+        id="emptyState"
+        hidden
+    >
+
+        No demons match your search.
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     HARD DEMONS
+===================================================== -->
+
+<section
+    class="hard-section"
+    id="hardSection"
+>
+
+
+    <button
+        class="hard-header"
+        id="hardHeader"
+    >
+
+
+        <div>
+
+            <span class="hard-title">
+
+                Hard Demons
+
+            </span>
+
+
+            <span
+                class="hard-count"
+                id="hardCount"
+            >
+
+                11 levels
+
+            </span>
+
+        </div>
+
+
+        <span
+            class="hard-arrow"
+            id="hardArrow"
+        >
+
+            ▼
+
+        </span>
+
+
+    </button>
+
+
+
+    <div
+        class="hard-content"
+        id="hardContent"
+    >
+
+        <div
+            class="hard-content-inner"
+        >
+
+            <div
+                id="hardList"
+            ></div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     ADD / EDIT WINDOW
+===================================================== -->
+
+<dialog
+    id="levelDialog"
+>
+
+
+    <div
+        class="dialog-content"
+    >
+
+
+        <h2
+            id="dialogTitle"
+        >
+
+            Add Demon
+
+        </h2>
+
+
+        <form
+            id="levelForm"
+        >
+
+
+            <div
+                class="form-grid"
+            >
+
+
+                <label>
+
+                    Demon name
+
+
+                    <input
+                        id="nameInput"
+                        required
+                        maxlength="100"
+                    >
+
+
+                </label>
+
+
+
+                <label>
+
+                    Difficulty
+
+
+                    <select
+                        id="difficultyInput"
+                    >
+
+                        <option value="Hard">
+                            Hard
+                        </option>
+
+                        <option value="Insane">
+                            Insane
+                        </option>
+
+                        <option value="Extreme">
+                            Extreme
+                        </option>
+
+                    </select>
+
+
+                </label>
+
+
+
+                <label>
+
+                    Attempts
+
+
+                    <input
+                        id="attemptsInput"
+                        placeholder="e.g. 1,234+ or ???"
+                        maxlength="30"
+                    >
+
+
+                </label>
+
+
+
+                <label>
+
+                    Notes
+
+
+                    <textarea
+                        id="notesInput"
+                        placeholder="Your thoughts on the level..."
+                    ></textarea>
+
+
+                </label>
+
+
+            </div>
+
+
+
+            <div
+                class="dialog-actions"
+            >
+
+
+                <button
+                    type="button"
+                    class="secondary"
+                    id="cancelBtn"
+                >
+
+                    Cancel
+
+                </button>
+
+
+                <button
+                    type="submit"
+                >
+
+                    Save Demon
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</dialog>
+
+
+
+<script>
+
+/* =========================================================
+   STARTER DATA
+========================================================= */
+
+const starterLevels = [
+
+
+    /* HARD DEMONS */
+
+
+    {
+        name: "Nine Circles",
+        difficulty: "Hard",
+        attempts: "~500+",
+        notes:
+            "Classic level. A few hundred additional attempts from copyables."
+    },
+
+
+    {
+        name: "Jawbreaker",
+        difficulty: "Hard",
+        attempts: "753",
+        notes:
+            "Another classic."
+    },
+
+
+    {
+        name: "Forest Temple",
+        difficulty: "Hard",
+        attempts: "1,094+",
+        notes:
+            "Kinda aids, but it's an old-ass level so can't blame it. Fluked from 55%."
+    },
+
+
+    {
+        name: "Fairydust",
+        difficulty: "Hard",
+        attempts: "1,019",
+        notes:
+            "Classic level. Absolutely aids for some reason, didn't like it. Fluked from 74%."
+    },
+
+
+    {
+        name: "Psychosis",
+        difficulty: "Hard",
+        attempts: "1,496",
+        notes:
+            "The best Hard Demon there is. Absolutely beautiful and fun as fuck. Fluked from ~53% on normal mode."
+    },
+
+
+    {
+        name: "Overclock",
+        difficulty: "Hard",
+        attempts: "???",
+        notes:
+            "Literally don't remember anything about this level. It's been fucking ages."
+    },
+
+
+    {
+        name: "The Caverns",
+        difficulty: "Hard",
+        attempts: "1,276",
+        notes:
+            "Beat it when it was considered an Insane Demon. Not super fun, but it's aight IMO. Fluked from 52% from what I remember. Beat it on my grandma's laptop pre-FPS bypass."
+    },
+
+
+    {
+        name: "Horror Hate",
+        difficulty: "Hard",
+        attempts: "366",
+        notes:
+            "Beat it because it was also considered an Insane Demon at some point. Don't remember anything else about it."
+    },
+
+
+    {
+        name: "Dreams",
+        difficulty: "Hard",
+        attempts: "???",
+        notes:
+            "Don't remember anything."
+    },
+
+
+    {
+        name: "Deadbeat",
+        difficulty: "Hard",
+        attempts: "???",
+        notes:
+            "Don't remember anything about it."
+    },
+
+
+    {
+        name: "Mechanical Torment",
+        difficulty: "Hard",
+        attempts: "???",
+        notes:
+            "Don't remember anything about it."
+    },
+
+
+    /* MAIN DEMON ORDER */
+
+
+    {
+        name: "Cataclysm",
+        difficulty: "Extreme",
+        attempts: "~11,000",
+        notes:
+            "My proudest and hardest achievement. Beat it when it was a Top 50 hardest level many years ago. Beat it on my grandma's laptop with FPS bypass."
+    },
+
+
+    {
+        name: "Ice Carbon Diablo X",
+        difficulty: "Insane",
+        attempts: "4,676+",
+        notes:
+            "Second hardest level I've beaten. Super unlucky deaths at the end and the level is pretty aids, but glad to have beaten it."
+    },
+
+
+    {
+        name: "Lightwave",
+        difficulty: "Insane",
+        attempts: "2,444+",
+        notes:
+            "Not too difficult. Extremely fun for a level from back in the day. Ending is really difficult compared to the rest."
+    },
+
+
+    {
+        name: "Poltergeist",
+        difficulty: "Insane",
+        attempts: "1,423",
+        notes:
+            "Didn't have much trouble after practicing it really hard. One of my BEST flukes — fluked from ~44%."
+    },
+
+
+    {
+        name: "Fexty (Ozpectro ver.)",
+        difficulty: "Insane",
+        attempts: "1,399+",
+        notes:
+            "Not very fun. Died after the wave difficulty spike ~4 times. Really buggy overall. Not that bad of a level though; could've been worse."
+    },
+
+
+    {
+        name: "Ultimate Demon Mix",
+        difficulty: "Insane",
+        attempts: "5,560",
+        notes:
+            "XDDD way too many attempts, but most are pure retry spam. Not super hard and not unfun. Ending is kinda difficult; otherwise it's chill."
+    },
+
+
+    {
+        name: "Windy Landscape",
+        difficulty: "Insane",
+        attempts: "1,605+",
+        notes:
+            "Amazing level, super fun. Really easy Insane Demon, but anyone should play it."
+    },
+
+
+    {
+        name: "The Janus Miracle",
+        difficulty: "Insane",
+        attempts: "1,700+",
+        notes:
+            "Another le funny. Stupidly hard difficulty spike in the middle but gets pretty consistent. Not very enjoyable; really buggy and ultimately kinda aids."
+    }
+
+];
+
+
+/* =========================================================
+   LOAD YOUR SAVED DATA
+========================================================= */
+
+let savedLevels =
+    localStorage.getItem(
+        "gdDemonTracker"
+    );
+
+
+let levels;
+
+
+if (savedLevels) {
+
+    levels =
+        JSON.parse(
+            savedLevels
+        );
+
+}
+
+else {
+
+    levels =
+        starterLevels.map(
+            level => ({ ...level })
+        );
+
+}
+
+
+/* =========================================================
+   IMPORTANT:
+   PUT NEW / UNKNOWN MAIN DEMONS AFTER YOUR CURRENT
+   CUSTOM ORDER.
+
+   This means Buff This stays at the bottom if you
+   already added it.
+
+   Existing Hard Demons are not touched.
+========================================================= */
+
+const preferredMainOrder = [
+
+    "Cataclysm",
+
+    "Ice Carbon Diablo X",
+
+    "Lightwave",
+
+    "Poltergeist",
+
+    "Fexty (Ozpectro ver.)",
+
+    "Ultimate Demon Mix",
+
+    "Windy Landscape",
+
+    "The Janus Miracle"
+
+];
+
+
+function arrangeInitialMainOrder() {
+
+
+    const hardDemons =
+        levels.filter(
+            level =>
+                level.difficulty ===
+                "Hard"
+        );
+
+
+    const mainDemons =
+        levels.filter(
+            level =>
+                level.difficulty !==
+                "Hard"
+        );
+
+
+    const orderedMain = [];
+
+
+    /* Put known demons in requested order */
+
+    preferredMainOrder.forEach(
+        name => {
+
+            const found =
+                mainDemons.find(
+                    level =>
+                        level.name ===
+                        name
+                );
+
+
+            if (found) {
+
+                orderedMain.push(
+                    found
+                );
+
+            }
+
+        }
+    );
+
+
+    /* Put any NEW demons after them */
+
+    mainDemons.forEach(
+        level => {
+
+            if (
+                !orderedMain.includes(
+                    level
+                )
+            ) {
+
+                orderedMain.push(
+                    level
+                );
+
+            }
+
+        }
+    );
+
+
+    levels = [
+
+        ...hardDemons,
+
+        ...orderedMain
+
+    ];
+
+}
+
+
+/* =========================================================
+   DO INITIAL ORDER ONLY ONCE
+========================================================= */
+
+if (
+    !localStorage.getItem(
+        "gdDemonCustomOrder"
+    )
+) {
+
+    arrangeInitialMainOrder();
+
+
+    localStorage.setItem(
+        "gdDemonCustomOrder",
+        "true"
+    );
+
+
+    localStorage.setItem(
+        "gdDemonTracker",
+        JSON.stringify(levels)
+    );
+
+}
+
+
+/* =========================================================
+   VARIABLES
+========================================================= */
+
+let editingIndex =
+    null;
+
+
+let draggedIndex =
+    null;
+
+
+/* =========================================================
+   HTML ELEMENTS
+========================================================= */
+
+const tableBody =
+    document.getElementById(
+        "tableBody"
+    );
+
+
+const hardList =
+    document.getElementById(
+        "hardList"
+    );
+
+
+const emptyState =
+    document.getElementById(
+        "emptyState"
+    );
+
+
+const search =
+    document.getElementById(
+        "search"
+    );
+
+
+const difficultyFilter =
+    document.getElementById(
+        "difficultyFilter"
+    );
+
+
+const sortSelect =
+    document.getElementById(
+        "sort"
+    );
+
+
+const dialog =
+    document.getElementById(
+        "levelDialog"
+    );
+
+
+const form =
+    document.getElementById(
+        "levelForm"
+    );
+
+
+const hardSection =
+    document.getElementById(
+        "hardSection"
+    );
+
+
+const hardHeader =
+    document.getElementById(
+        "hardHeader"
+    );
+
+
+/* =========================================================
+   HARD SECTION OPEN / CLOSE
+========================================================= */
+
+hardHeader.addEventListener(
+    "click",
+    () => {
+
+        hardSection.classList.toggle(
+            "open"
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+function save() {
+
+    localStorage.setItem(
+        "gdDemonTracker",
+        JSON.stringify(levels)
+    );
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   ATTEMPTS → NUMBER
+========================================================= */
+
+function numericAttempts(value) {
+
+    const match =
+        String(value)
+            .replaceAll(",", "")
+            .match(/\d+/);
+
+
+    if (match) {
+
+        return Number(
+            match[0]
+        );
+
+    }
+
+
+    return Infinity;
+
+}
+
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+function renderStats() {
+
+
+    document.getElementById(
+        "totalStat"
+    ).textContent =
+        levels.length;
+
+
+    document.getElementById(
+        "hardStat"
+    ).textContent =
+
+        levels.filter(
+            level =>
+                level.difficulty ===
+                "Hard"
+        ).length;
+
+
+    document.getElementById(
+        "insaneStat"
+    ).textContent =
+
+        levels.filter(
+            level =>
+                level.difficulty ===
+                "Insane"
+        ).length;
+
+
+    document.getElementById(
+        "extremeStat"
+    ).textContent =
+
+        levels.filter(
+            level =>
+                level.difficulty ===
+                "Extreme"
+        ).length;
+
+
+    document.getElementById(
+        "hardCount"
+    ).textContent =
+
+        `${
+            levels.filter(
+                level =>
+                    level.difficulty ===
+                    "Hard"
+            ).length
+        } levels`;
+
+}
+
+
+/* =========================================================
+   SEARCH FILTER
+========================================================= */
+
+function matchesSearch(level) {
+
+
+    const query =
+        search.value
+            .trim()
+            .toLowerCase();
+
+
+    const selectedDifficulty =
+        difficultyFilter.value;
+
+
+    const difficultyMatches =
+
+        selectedDifficulty ===
+            "all"
+
+        ||
+
+        level.difficulty ===
+            selectedDifficulty;
+
+
+    const searchableText =
+
+        `${level.name}
+         ${level.notes}
+         ${level.attempts}`
+            .toLowerCase();
+
+
+    return (
+
+        difficultyMatches &&
+
+        searchableText.includes(
+            query
+        )
+
+    );
+
+}
+
+
+/* =========================================================
+   GET MAIN DEMONS
+========================================================= */
+
+function getMainLevels() {
+
+
+    let result =
+
+        levels
+
+            .map(
+                (level, index) => ({
+
+                    ...level,
+
+                    originalIndex:
+                        index
+
+                })
+            )
+
+
+            .filter(
+                level =>
+                    level.difficulty !==
+                    "Hard"
+            )
+
+
+            .filter(
+                matchesSearch
+            );
+
+
+    /*
+       "My Order" does NOT sort anything.
+
+       It simply uses the exact order
+       stored in the levels array.
+
+       That's what allows drag & drop.
+    */
+
+    if (
+        sortSelect.value ===
+        "custom"
+    ) {
+
+        return result;
+
+    }
+
+
+    if (
+        sortSelect.value ===
+        "name"
+    ) {
+
+        result.sort(
+            (a, b) =>
+                a.name.localeCompare(
+                    b.name
+                )
+        );
+
+    }
+
+
+    if (
+        sortSelect.value ===
+        "attempts"
+    ) {
+
+        result.sort(
+
+            (a, b) =>
+
+                numericAttempts(
+                    a.attempts
+                )
+
+                -
+
+                numericAttempts(
+                    b.attempts
+                )
+
+        );
+
+    }
+
+
+    return result;
+
+}
+
+
+/* =========================================================
+   DRAG START
+========================================================= */
+
+function dragStart(event) {
+
+
+    draggedIndex =
+        Number(
+            event.currentTarget.dataset.index
+        );
+
+
+    event.currentTarget.classList.add(
+        "dragging"
+    );
+
+
+    event.dataTransfer.effectAllowed =
+        "move";
+
+
+    event.dataTransfer.setData(
+        "text/plain",
+        String(draggedIndex)
+    );
+
+}
+
+
+/* =========================================================
+   DRAG END
+========================================================= */
+
+function dragEnd(event) {
+
+
+    event.currentTarget.classList.remove(
+        "dragging"
+    );
+
+
+    document
+        .querySelectorAll(
+            ".demon-row.drag-over"
+        )
+        .forEach(
+            row =>
+                row.classList.remove(
+                    "drag-over"
+                )
+        );
+
+
+    draggedIndex =
+        null;
+
+}
+
+
+/* =========================================================
+   DRAG OVER
+========================================================= */
+
+function dragOver(event) {
+
+
+    event.preventDefault();
+
+
+    event.dataTransfer.dropEffect =
+        "move";
+
+
+    event.currentTarget.classList.add(
+        "drag-over"
+    );
+
+}
+
+
+/* =========================================================
+   DRAG LEAVE
+========================================================= */
+
+function dragLeave(event) {
+
+
+    event.currentTarget.classList.remove(
+        "drag-over"
+    );
+
+}
+
+
+/* =========================================================
+   DROP
+========================================================= */
+
+function dropRow(event) {
+
+
+    event.preventDefault();
+
+
+    event.currentTarget.classList.remove(
+        "drag-over"
+    );
+
+
+    const targetIndex =
+        Number(
+            event.currentTarget.dataset.index
+        );
+
+
+    if (
+        draggedIndex === null
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        draggedIndex ===
+        targetIndex
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       Remove the dragged demon
+       from its old position.
+    */
+
+    const draggedLevel =
+        levels.splice(
+            draggedIndex,
+            1
+        )[0];
+
+
+    /*
+       If the original position was
+       before the target, removing it
+       shifts the target one position up.
+    */
+
+    let newTargetIndex =
+        targetIndex;
+
+
+    if (
+        draggedIndex <
+        targetIndex
+    ) {
+
+        newTargetIndex--;
+
+    }
+
+
+    /*
+       Insert it at the new position.
+    */
+
+    levels.splice(
+        newTargetIndex,
+        0,
+        draggedLevel
+    );
+
+
+    save();
+
+
+    render();
+
+
+    draggedIndex =
+        null;
+
+}
+
+
+/* =========================================================
+   RENDER MAIN TABLE
+========================================================= */
+
+function renderMainTable() {
+
+
+    const visible =
+        getMainLevels();
+
+
+    tableBody.innerHTML =
+        "";
+
+
+    visible.forEach(
+        level => {
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const rowClass =
+
+                level.difficulty ===
+                    "Extreme"
+
+                    ?
+
+                "extreme-row"
+
+                    :
+
+                "insane-row";
+
+
+            row.className =
+                `demon-row ${rowClass}`;
+
+
+            /*
+               Store the actual index in
+               the complete levels array.
+            */
+
+            row.dataset.index =
+                level.originalIndex;
+
+
+            /*
+               Enable dragging.
+            */
+
+            row.draggable =
+                true;
+
+
+            row.innerHTML = `
+
+
+                <td class="name">
+
+                    ${escapeHtml(
+                        level.name
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="badge ${level.difficulty.toLowerCase()}"
+                    >
+
+                        ${escapeHtml(
+                            level.difficulty
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td class="attempts">
+
+                    ${escapeHtml(
+                        level.attempts ||
+                        "—"
+                    )}
+
+                </td>
+
+
+                <td class="notes">
+
+                    <span
+                        class="notes-box"
+                    >
+
+                        ${escapeHtml(
+                            level.notes ||
+                            "—"
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td class="actions">
+
+
+                    <button
+                        class="secondary"
+                        onclick="editLevel(${level.originalIndex})"
+                    >
+
+                        Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete"
+                        onclick="deleteLevel(${level.originalIndex})"
+                    >
+
+                        Delete
+
+                    </button>
+
+
+                </td>
+
+            `;
+
+
+            /*
+               DRAG EVENTS
+            */
+
+            row.addEventListener(
+                "dragstart",
+                dragStart
+            );
+
+
+            row.addEventListener(
+                "dragend",
+                dragEnd
+            );
+
+
+            row.addEventListener(
+                "dragover",
+                dragOver
+            );
+
+
+            row.addEventListener(
+                "dragleave",
+                dragLeave
+            );
+
+
+            row.addEventListener(
+                "drop",
+                dropRow
+            );
+
+
+            tableBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    emptyState.hidden =
+        visible.length !== 0;
+
+}
+
+
+/* =========================================================
+   RENDER HARD DEMONS
+========================================================= */
+
+function renderHardDemons() {
+
+
+    const hardLevels =
+
+        levels
+
+            .map(
+                (level, index) => ({
+
+                    ...level,
+
+                    originalIndex:
+                        index
+
+                })
+            )
+
+
+            .filter(
+                level =>
+                    level.difficulty ===
+                    "Hard"
+            )
+
+
+            .filter(
+                matchesSearch
+            );
+
+
+    hardList.innerHTML =
+        "";
+
+
+    if (
+        hardLevels.length ===
+        0
+    ) {
+
+        hardList.innerHTML = `
+
+            <div
+                style="
+                    padding: 20px;
+                    color: #d49ca5;
+                "
+            >
+
+                No Hard Demons
+                match your search.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    hardLevels.forEach(
+        level => {
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "hard-card";
+
+
+            card.innerHTML = `
+
+
+                <div
+                    class="hard-card-top"
+                >
+
+
+                    <div
+                        class="hard-card-name"
+                    >
+
+                        ${escapeHtml(
+                            level.name
+                        )}
+
+                    </div>
+
+
+                    <div
+                        class="hard-card-attempts"
+                    >
+
+                        ${escapeHtml(
+                            level.attempts
+                        )}
+
+                    </div>
+
+
+                </div>
+
+
+                <div
+                    class="hard-card-notes"
+                >
+
+                    ${escapeHtml(
+                        level.notes
+                    )}
+
+                </div>
+
+
+                <div
+                    class="hard-actions"
+                >
+
+
+                    <button
+                        class="secondary"
+                        onclick="editLevel(${level.originalIndex})"
+                    >
+
+                        Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete"
+                        onclick="deleteLevel(${level.originalIndex})"
+                    >
+
+                        Delete
+
+                    </button>
+
+
+                </div>
+
+            `;
+
+
+            hardList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   RENDER EVERYTHING
+========================================================= */
+
+function render() {
+
+
+    renderStats();
+
+
+    renderMainTable();
+
+
+    renderHardDemons();
+
+}
+
+
+/* =========================================================
+   ADD DEMON
+========================================================= */
+
+function openAddDialog() {
+
+
+    editingIndex =
+        null;
+
+
+    document.getElementById(
+        "dialogTitle"
+    ).textContent =
+        "Add Demon";
+
+
+    form.reset();
+
+
+    dialog.showModal();
+
+
+    document.getElementById(
+        "nameInput"
+    ).focus();
+
+}
+
+
+/* =========================================================
+   EDIT DEMON
+========================================================= */
+
+function editLevel(index) {
+
+
+    editingIndex =
+        index;
+
+
+    const level =
+        levels[index];
+
+
+    document.getElementById(
+        "dialogTitle"
+    ).textContent =
+        "Edit Demon";
+
+
+    document.getElementById(
+        "nameInput"
+    ).value =
+        level.name;
+
+
+    document.getElementById(
+        "difficultyInput"
+    ).value =
+        level.difficulty;
+
+
+    document.getElementById(
+        "attemptsInput"
+    ).value =
+        level.attempts;
+
+
+    document.getElementById(
+        "notesInput"
+    ).value =
+        level.notes;
+
+
+    dialog.showModal();
+
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+function deleteLevel(index) {
+
+
+    const confirmed =
+
+        confirm(
+            `Delete "${levels[index].name}"?`
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    levels.splice(
+        index,
+        1
+    );
+
+
+    save();
+
+
+    render();
+
+}
+
+
+/* =========================================================
+   ADD / EDIT FORM
+========================================================= */
+
+form.addEventListener(
+    "submit",
+    event => {
+
+
+        event.preventDefault();
+
+
+        const newLevel = {
+
+
+            name:
+
+                document
+                    .getElementById(
+                        "nameInput"
+                    )
+                    .value
+                    .trim(),
+
+
+            difficulty:
+
+                document
+                    .getElementById(
+                        "difficultyInput"
+                    )
+                    .value,
+
+
+            attempts:
+
+                document
+                    .getElementById(
+                        "attemptsInput"
+                    )
+                    .value
+                    .trim()
+
+                ||
+
+                "???",
+
+
+            notes:
+
+                document
+                    .getElementById(
+                        "notesInput"
+                    )
+                    .value
+                    .trim()
+
+        };
+
+
+        /*
+           NEW DEMONS ARE ADDED TO THE END.
+
+           You can then drag them wherever
+           you want.
+        */
+
+        if (
+            editingIndex ===
+            null
+        ) {
+
+            levels.push(
+                newLevel
+            );
+
+        }
+
+
+        else {
+
+            levels[
+                editingIndex
+            ] =
+                newLevel;
+
+        }
+
+
+        save();
+
+
+        render();
+
+
+        dialog.close();
+
+    }
+);
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document
+    .getElementById(
+        "addBtn"
+    )
+    .addEventListener(
+        "click",
+        openAddDialog
+    );
+
+
+document
+    .getElementById(
+        "cancelBtn"
+    )
+    .addEventListener(
+        "click",
+        () =>
+            dialog.close()
+    );
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+search.addEventListener(
+    "input",
+    render
+);
+
+
+/* =========================================================
+   DIFFICULTY FILTER
+========================================================= */
+
+difficultyFilter.addEventListener(
+    "change",
+    render
+);
+
+
+/* =========================================================
+   SORT
+========================================================= */
+
+sortSelect.addEventListener(
+    "change",
+    render
+);
+
+
+/* =========================================================
+   EXPORT CSV
+========================================================= */
+
+document
+    .getElementById(
+        "exportBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+
+            const rows = [
+
+
+                [
+                    "Demon",
+                    "Difficulty",
+                    "Attempts",
+                    "Notes"
+                ],
+
+
+                ...levels.map(
+                    level => [
+
+                        level.name,
+
+                        level.difficulty,
+
+                        level.attempts,
+
+                        level.notes
+
+                    ]
+                )
+
+
+            ];
+
+
+            const csv =
+
+                rows
+
+                    .map(
+                        row =>
+
+                            row
+
+                                .map(
+                                    value =>
+
+                                        `"${String(
+                                            value
+                                        ).replaceAll(
+                                            '"',
+                                            '""'
+                                        )}"`
+                                )
+
+                                .join(",")
+
+                    )
+
+                    .join("\n");
+
+
+            const blob =
+
+                new Blob(
+                    [csv],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const url =
+
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                url;
+
+
+            link.download =
+                "geometry-dash-demons.csv";
+
+
+            link.click();
+
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+render();
+
+</script>
+
+
+</body>
+
+</html>
